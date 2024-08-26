@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CometChat Integration</title>
+    <style>
+        #chat-container {
+            width: 100%;
+            height: 600px;
+            position: relative;
+            border: 1px solid #ccc;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        #login-form {
+            margin: 20px;
+        }
+        #login-form input {
+            padding: 10px;
+            margin-right: 10px;
+        }
+        #login-form button {
+            padding: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="login-form">
+        <input type="text" id="user-id" placeholder="Enter user ID">
+        <button onclick="loginUser()">Login</button>
+    </div>
+
+    <div id="chat-container"></div>
+
+    <!-- Include the CometChat SDK file -->
+    <script src="cometchat.js"></script>
+    <script>
+        // CometChat credentials
+        const appID = 'YOUR_APP_ID'; // Replace with your App ID
+        const region = 'YOUR_REGION'; // e.g., 'us', 'eu'
+        const apiKey = 'YOUR_API_KEY'; // Replace with your API Key
+
+        // Initialize CometChat
+        CometChat.init(appID, region).then(() => {
+            console.log("CometChat initialized successfully.");
+        }).catch(error => {
+            console.error("CometChat initialization failed:", error);
+        });
+
+        // Function to log in the user
+        function loginUser() {
+            const userID = document.getElementById('user-id').value;
+            if (!userID) {
+                alert('Please enter a user ID.');
+                return;
+            }
+
+            CometChat.login(userID, apiKey).then(user => {
+                console.log("User logged in successfully:", user);
+                initializeChat();
+            }).catch(error => {
+                console.error("User login failed:", error);
+            });
+        }
+
+        // Function to initialize the chat interface
+        function initializeChat() {
+            // Example setup for CometChat widget
+            CometChatWidget.init({
+                appID: appID,
+                authKey: apiKey,
+                containerID: 'chat-container'
+            }).then(() => {
+                console.log("CometChatWidget initialized successfully.");
+            }).catch(error => {
+                console.error("CometChatWidget initialization failed:", error);
+            });
+        }
+    </script>
+</body>
+</html>
